@@ -1,0 +1,6 @@
+# Remove .gitattributes from repository
+.gitattributes
+
+# Remove .DS_Store from repository
+.DS_Store
+

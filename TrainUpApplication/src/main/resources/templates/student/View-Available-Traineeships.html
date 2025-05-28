@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TRAINUP - Student Homepage</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <style>
+      body {
+        background-color: #f4f7fc;
+        font-family: 'Arial', sans-serif;
+      }
+
+      /* HEADER CONTAINER */
+      .header {
+        background-color: #0c3759;
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+      }
+
+      /* STUDENT PORTAL (αριστερά στο μπλε πλαίσιο) */
+      .portal-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #28a745;
+        text-transform: uppercase;
+      }
+
+      
+      .header-content {
+        text-align: center;
+        flex-grow: 1;
+      }
+
+      .header-content img {
+        height: 80px;
+        margin-bottom: 5px;
+      }
+      .header-content h2 {
+        font-size: 1.3em;
+        margin: 0;
+      }
+
+      /* Logout κουμπί */
+      .logout-btn {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+      }
+      /* Profile image container με absolute positioning κάτω από το logout */
+      .profile-image-container {
+        position: absolute;
+        right: 20px;
+        top: 70px;
+      }
+      .profile-image-container img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      /* Ειδικά για το default avatar */
+      .default-avatar {
+        opacity: 0.8;
+      }
+
+      .container {
+        margin-top: 30px;
+      }
+      .profile-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .category-title {
+        font-weight: bold;
+        color: #0c3759;
+        border-bottom: 2px solid #0c3759;
+        padding-bottom: 5px;
+      }
+      .btn-custom {
+        background-color: #0c3759;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+      }
+      .btn-delete {
+        background-color: red;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 15px;
+        font-size: 0.9em;
+      }
+      .footer {
+        background-color: #0c3759;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        margin-top: 220px;
+      }
+      .quote {
+        font-style: italic;
+        color: #28a745;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+      }
+      
+    </style>
+    <script>
+      function confirmDelete() {
+        return confirm("Are you sure you want to delete your account? This action cannot be undone.");
+      }
+      function confirmLogout() {
+        return confirm("Are you sure you want to log out?");
+      }
+    </script>
+</head>
+<body>
+  <div class="header">
+    <!-- STUDENT PORTAL (μέσα στο μπλε, αριστερά) -->
+    <div class="portal-title">STUDENT PORTAL</div>
+
+    <!-- Κεντραρισμένο Logo + Brand -->
+    <div class="header-content">
+      <img src="/images/logo.png" alt="TRAINUP Logo">
+      <h2>TRAINUP - Bridging Students & Careers</h2>
+    </div>
+
+    <!-- Logout button -->
+    <form action="/logout" method="post" onsubmit="return confirmLogout();" class="logout-btn">
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+  </div>
+
+ 
+  <!-- Εικονίδιο Προφίλ Χρήστη κάτω από το μπλε -->
+	<div class="profile-image-container">
+	    <img th:if="${student.profileImage != null}"
+	         th:src="@{'/student/profileImage/' + ${student.user.id}}"
+	         alt="Profile Image" />
+	
+	    <img th:if="${student.profileImage == null}"
+	         src="/images/user.png"
+	         alt="Default User Icon"
+	         class="default-avatar" />
+	</div>
+	
+  <div class="container mt-4">
+    <h2>Available Traineeship Positions</h2>
+    <p class="text-muted">Below are the open traineeship positions offered by companies.</p>
+
+    <!-- Εμφάνιση μηνύματος αν υπάρχει ήδη assigned traineeship -->
+    <p th:if="${student.assignedTraineeship != null}" class="alert alert-warning">
+      You already have a traineeship assigned!
+    </p>
+
+    <!-- Εδώ κρύβουμε το table, είτε απενεργοποιούμε τα κουμπιά Apply -->
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Skills Required</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Company</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pos : ${positions}">
+                <td th:text="${pos.title}">Title</td>
+                <td th:text="${pos.description}">Description</td>
+                <td th:text="${#strings.listJoin(pos.skills, ', ')}">Skills Required</td>
+                <td th:text="${pos.fromDate}">FromDate</td>
+                <td th:text="${pos.toDate}">ToDate</td>
+
+                <!-- Company name ως link προς τα details -->
+                <td>
+                  <a th:href="@{/informations/companyDetails (cid=${pos.company.user.id})}"
+                 	 th:text="${pos.company.companyName}">Company Name</a>
+                </td>
+
+                <td>
+                  <!-- Αν ο student έχει assigned, δεν δείχνουμε Apply καθόλου -->
+                  <span th:if="${student.assignedTraineeship != null}">
+                    N/A
+                  </span>
+
+                  <span th:if="${student.assignedTraineeship == null}">
+                    <span th:if="${#lists.contains(student.appliedPositions, pos)}">
+                      Already applied
+                    </span>
+                    <a th:if="${!#lists.contains(student.appliedPositions, pos)}"
+                       class="btn btn-primary"
+                       th:href="@{/student/applyPosition/{posId}(posId=${pos.id})}">
+                       Apply
+                    </a>
+                  </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+	
+    <a th:href="@{/student/homepage}" class="btn btn-secondary">Return to Homepage</a>
+  </div>
+   <div class="footer">
+        <p>Support: trainup.support@yahoo.gr | Phone: +30 210 3366999</p>
+    </div>
+</body>
+</html>

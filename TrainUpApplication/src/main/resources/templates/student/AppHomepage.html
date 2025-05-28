@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Traineeship Web Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f7fa;
+            text-align: center;
+        }
+        .container {
+            max-width: 700px;
+            margin-top: 80px;
+        }
+        .logo {
+            width: 240px;
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #343a40;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 12px 20px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            padding: 12px 20px;
+        }
+         .app-header {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .app-tagline {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="app-header">
+    TRAINUP <br>
+    <span class="app-tagline">Bridging students & careers</span>
+</div>
+<div class="container">
+    <img src="/images/logo.png" alt="Traineeship Logo" class="logo">
+    <h2>Welcome to the Traineeship Managment Web Application</h2>
+	<p class="lead">Welcome to the future of internships – Explore, connect, and grow!</p>
+    <p class="lead">This is your gateway to professional opportunities and growth.</p>
+
+    <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+        <a th:href="@{/login}" class="btn btn-primary btn-lg mt-3">Login</a>
+        <a th:href="@{/register}" class="btn btn-secondary btn-lg mt-3">Register</a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <h4>Welcome, <span sec:authentication="name"></span>!</h4>
+        <h5>Your role: <span sec:authentication="authorities"></span></h5>
+
+        <p sec:authorize="hasAuthority('PROFESSOR')">
+            <a th:href="@{/professor/homepage}" class="btn btn-primary mt-3">Professor Dashboard</a>
+        </p>
+        <p sec:authorize="hasAuthority('STUDENT')">
+            <a th:href="@{/student/homepage}" class="btn btn-primary mt-3">Student Dashboard</a>
+        </p>
+        <p sec:authorize="hasAuthority('COMPANY')">
+            <a th:href="@{/company/homepage}" class="btn btn-primary mt-3">Company Dashboard</a>
+        </p>
+        <p sec:authorize="hasAuthority('TRAINEESHIP_COMMITTEE')">
+            <a th:href="@{/committee/homepage}" class="btn btn-primary mt-3">Committee Dashboard</a>
+        </p>
+        <a th:href="@{/logout}" class="btn btn-danger mt-3">Logout</a>
+    </div>
+</div>
+
+</body>
+</html>

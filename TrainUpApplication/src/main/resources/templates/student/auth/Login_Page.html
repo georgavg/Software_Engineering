@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign In - TRAINUP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 400px;
+            margin-top: 100px;
+        }
+        .logo {
+            display: block;
+            width: 160px;
+            margin: 0 auto 40px;
+        }
+        .app-header {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .app-tagline {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        /* Μικρό εικονίδιο / κουμπί δίπλα στο password */
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 36px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="app-header">
+    TRAINUP <br>
+    <span class="app-tagline">Bridging students & careers</span>
+</div>
+<div class="container text-center">
+    <img src="/images/logo.png" alt="Traineeship Logo" class="logo">
+    <h2 class="mb-4">Sign In</h2>
+    <p class="text-muted">Unlock your future – Sign in to start your traineeship journey!</p>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group text-left">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control"
+                   id="username" name="username" required />
+        </div>
+        <div class="form-group text-left" style="position: relative;">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control"
+                   id="password" name="password" required />
+            <!-- Εικονίδιο-κουμπί για Show/Hide -->
+            <span class="toggle-password" onclick="togglePassword()">
+                <img src="/images/eye.png" alt="Show/Hide" width="25">
+            </span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <a th:href="@{/register}" class="btn btn-secondary btn-block mt-2">Register</a>
+    </form>
+
+    <p th:if="${param.error}" class="text-danger mt-3">
+        Invalid username or password.
+    </p>
+</div>
+
+<script>
+  function togglePassword() {
+    const pwField = document.getElementById('password');
+    if (pwField.type === 'password') {
+      pwField.type = 'text';
+    } else {
+      pwField.type = 'password';
+    }
+  }
+</script>
+</body>
+</html>

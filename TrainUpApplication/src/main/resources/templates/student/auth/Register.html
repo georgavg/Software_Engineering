@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register - TRAINUP</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        .logo {
+            display: block;
+            width: 120px;
+            margin: 0 auto 20px;
+        }
+        .app-header {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .app-tagline {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="app-header">
+    TRAINUP <br>
+    <span class="app-tagline">Bridging students & careers</span>
+</div>
+<div class="container text-center">
+    <img src="/images/logo.png" alt="TRAINUP Logo" class="logo">
+    <h2 class="mb-4">Create an Account</h2>
+    <p class="text-muted">Your career starts here – Join the traineeship network today!</p>
+
+    <form th:action="@{/save}" th:object="${user}" method="post" onsubmit="return checkPasswords();">
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="form-group text-left">
+            <label for="username">Username:</label>
+            <input type="text"
+                   th:field="*{username}"
+                   class="form-control"
+                   id="username" required>
+        </div>
+
+        <div class="form-group text-left">
+            <label for="email">Email:</label>
+            <input type="email"
+                   th:field="*{email}"
+                   class="form-control"
+                   id="email" required>
+        </div>
+
+        <div class="form-group text-left">
+            <label for="password">Password:</label>
+            <input type="password"
+                   th:field="*{password}"
+                   class="form-control"
+                   id="password" required>
+        </div>
+
+        <!-- Νέο πεδίο Confirm Password -->
+        <div class="form-group text-left">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password"
+                   class="form-control"
+                   id="confirmPassword" required>
+        </div>
+
+        <div class="form-group text-left">
+            <label for="role">Role:</label>
+            <select th:field="*{role}"
+                    class="form-control" id="role">
+                <option th:value="STUDENT">STUDENT</option>
+                <option th:value="PROFESSOR">PROFESSOR</option>
+                <option th:value="COMPANY">COMPANY</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <a th:href="@{/login}" class="btn btn-secondary btn-block mt-2">Login Page</a>
+    </form>
+</div>
+
+<script>
+  function checkPasswords() {
+    const pw = document.getElementById("password").value;
+    const cpw = document.getElementById("confirmPassword").value;
+    if (pw !== cpw) {
+      alert("Passwords do not match. Please try again.");
+      return false;
+    }
+    return true;
+  }
+</script>
+</body>
+</html>

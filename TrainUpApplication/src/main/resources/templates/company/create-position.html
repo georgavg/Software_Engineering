@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Create Position</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+    .header-left img {
+      height: 60px;
+      margin-right: 10px;
+    }
+    .header-right {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #28a745;
+    }
+    .container {
+      margin-top: 30px;
+      max-width: 600px;
+    }
+    .btn-custom {
+      background-color: #0c3759;
+      color: white;
+      border-radius: 20px;
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Μικρό header: Logo αριστερά, Όνομα Εταιρείας δεξιά -->
+  <div class="header">
+    <div class="header-left">
+      <img src="/images/logo.png" alt="Company Logo">
+    </div>
+    <div class="header-right" th:text="${company.companyName}">Company Name</div>
+  </div>
+
+  <div class="container">
+    <h2 class="mb-4">Create a New Traineeship Position</h2>
+    <form th:action="@{/company/savePosition}" th:object="${position}" method="post">
+      <div class="form-group">
+        <label for="title">Position Title <span style="color:red">*</span></label>
+        <input type="text" class="form-control" id="title" th:field="*{title}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Short Description (Optional)</label>
+        <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="fromDate">Start Date <span style="color:red">*</span></label>
+        <input type="date" class="form-control" id="fromDate" th:field="*{fromDate}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="toDate">End Date <span style="color:red">*</span></label>
+        <input type="date" class="form-control" id="toDate" th:field="*{toDate}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="topicsAsString">Topics (comma-separated) <span style="color:red">*</span></label>
+        <input type="text" class="form-control" id="topicsAsString" th:field="*{topicsAsString}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="skillsAsString">Required Skills (comma-separated) <span style="color:red">*</span></label>
+        <input type="text" class="form-control" id="skillsAsString" th:field="*{skillsAsString}" required />
+      </div>
+
+      <button type="submit" class="btn btn-custom">Save Position</button>
+      <a th:href="@{/company/positions}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

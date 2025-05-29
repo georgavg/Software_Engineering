@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRAINUP - Professor Homepage</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 40px;
+      position: relative;
+    }
+    .portal-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #28a745;
+      text-transform: uppercase;
+      float: left;
+    }
+    .header-content {
+      text-align: center;
+    }
+    .header-content img {
+      height: 80px;
+      margin-bottom: 5px;
+    }
+    .header-content h2 {
+      font-size: 1.3em;
+      margin: 0;
+    }
+    .logout-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .profile-image-container {
+      position: absolute;
+      right: 20px;
+      top: 70px;
+    }
+    .profile-image-container img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .default-avatar {
+      opacity: 0.8;
+    }
+    .quote {
+      font-style: italic;
+      color: #28a745;
+      text-align: center;
+      margin: 20px 0;
+      font-size: 1.3em;
+    }
+    .profile-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .category-title {
+      font-weight: bold;
+      color: #0c3759;
+      border-bottom: 2px solid #0c3759;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    .btn-custom {
+      background-color: #0c3759;
+      color: white;
+      border-radius: 20px;
+      padding: 10px 20px;
+    }
+    .footer {
+      background-color: #0c3759;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 30px;
+    }
+    .login-info {
+      position: relative;
+      bottom: 10px;
+      left: 10px;
+      text-align: left;
+      font-size: 0.9em;
+    }
+    .btn-delete {
+      background-color: red;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 15px;
+      font-size: 0.9em;
+      border: none;
+    }
+  </style>
+  <script>
+    function confirmDelete() {
+      return confirm("Are you sure you want to delete your account? This action cannot be undone.");
+    }
+    function confirmLogout() {
+      return confirm("Are you sure you want to log out?");
+    }
+  </script>
+</head>
+<body>
+  <div class="header">
+    <div class="portal-title">PROFESSOR PORTAL</div>
+    <div class="header-content">
+      <img src="/images/logo.png" alt="TRAINUP Logo">
+      <h2>TRAINUP - Bridging Academia & Industry</h2>
+    </div>
+    <form action="/logout" method="post" onsubmit="return confirmLogout();" class="logout-btn">
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+    <div class="profile-image-container">
+      <img th:if="${professor.profileImage != null}"
+           th:src="@{'/professor/profileImage/' + ${professor.user.id}}"
+           alt="Profile Image" />
+      <img th:if="${professor.profileImage == null}"
+           src="/images/user.png"
+           alt="Default User Icon"
+           class="default-avatar" />
+    </div>
+  </div>
+  
+  <div class="container mt-4">
+      <p class="quote">"Education is the key to the future it creates – it opens."</p>
+      
+      <div class="row">
+          <div class="col-md-6">
+              <div class="profile-card">
+                  <h4 class="category-title">Profile Information</h4>
+                  <p><strong>Full Name:</strong> <span th:text="${professor.professorName}"></span></p>
+                  <p><strong>Email:</strong> <span th:text="${professor.user.email}"></span></p>
+                  <p><strong>Phone Number:</strong> <span th:text="${professor.professorNumber}"></span></p>
+                  <p><strong>Location:</strong> <span th:text="${professor.professorLocation}"></span></p>
+              </div>
+          </div>
+          <div class="col-md-6">
+              <div class="profile-card">
+                  <h4 class="category-title">Professional Information</h4>
+                  <p><strong>University:</strong> <span th:text="${professor.professorUniversity}"></span></p>
+                  <p><strong>Biography:</strong> <span th:text="${professor.professorBiography}"></span></p>
+                  <p><strong>Website:</strong> 
+                     <a th:href="${professor.professorWebsite}" th:text="${professor.professorWebsite}" target="_blank"></a>
+                  </p>
+                  <p><strong>Interests:</strong> <span th:text="${professor.getInterestsAsString()}"></span></p>
+              </div>
+          </div>
+          <div class="col-md-6">
+                <div class="profile-card">
+                    <h4 class="category-title">Interests</h4>
+                    <ul th:if="${not #lists.isEmpty(professor.interests)}">
+                        <li th:each="interest : ${professor.interests}" th:text="${interest}"></li>
+                    </ul>
+                    <p th:if="${#lists.isEmpty(professor.interests)}">No interests listed.</p>
+                </div>
+            </div>
+      </div>
+      
+      <div class="text-center mb-4">
+          <a class="btn btn-custom" href="/professor/profile">Edit Profile</a>
+      </div>
+      
+      <!-- Button to view supervised traineeships -->
+      <div class="text-center mb-4">
+          <a class="btn btn-custom" href="/professor/traineeships">View Supervised Traineeships</a>
+          <a class="btn btn-custom" href="/professor/completedTraineeships">View Completed Traineeships</a>	
+      </div>
+  </div>
+  
+  <div class="login-info">
+      <p>Logged in as: <b th:text="${#authentication.name}"></b></p>
+      <p>Role: <b th:text="${#authentication.authorities[0].authority}"></b></p>
+      <form action="/deleteAccount" method="post" onsubmit="return confirmDelete();">
+          <button type="submit" class="btn btn-delete">Delete Account</button>
+      </form>
+  </div>
+  
+  <div class="footer">
+      <p>Support: trainup.support@yahoo.gr | Phone: +30 210 3366999</p>
+  </div>
+</body>
+</html>

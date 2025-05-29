@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Completed Traineeships</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: Arial, sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 40px;
+      position: relative;
+      text-align: center;
+    }
+    .header h2 {
+      margin: 0;
+    }
+    .logout-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    .card {
+      margin-bottom: 15px;
+    }
+    .footer {
+      background-color: #0c3759;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 30px;
+    }
+    .evaluations {
+      background-color: #eef3f8;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .company-info {
+      font-size: 0.9em;
+      color: #666;
+    }
+    .pass-fail-badge {
+      font-weight: bold;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+    }
+    .pass-badge {
+      background-color: green;
+    }
+    .fail-badge {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h2>Completed Traineeships</h2>
+  <form action="/logout" method="post" class="logout-btn">
+    <button class="btn btn-danger" type="submit">Logout</button>
+  </form>
+</div>
+
+<div class="container">
+
+  <div th:if="${#lists.isEmpty(positions)}">
+    <p>No completed traineeships found.</p>
+  </div>
+
+  <div th:each="pos : ${positions}" class="card">
+    <div class="card-body">
+      <h5 class="card-title">
+		  <a th:href="@{'/informations/positionDetails?pid=' + ${pos.id}}"
+		     th:text="${pos.title}">Position Title</a>
+		</h5>
+
+      <!-- Show pass/fail badge -->
+      <span th:if="${pos.passFailGrade}"
+            class="pass-fail-badge pass-badge">
+        PASS
+      </span>
+      <span th:if="${pos.passFailGrade == false}"
+            class="pass-fail-badge fail-badge">
+        FAIL
+      </span>
+
+      <p><strong>Company:</strong>
+		  <span th:if="${pos.company != null}">
+		    <a th:href="@{'/informations/companyDetails?cid=' + ${pos.company.user.id}}"
+		       th:text="${pos.company.companyName}">CompanyName</a>
+		  </span>
+		  <span th:if="${pos.company == null}">No Company</span>
+		</p>
+
+      <p><strong>Student:</strong>
+		  <span th:if="${pos.student != null}">
+		    <a th:href="@{'/informations/studentDetails?sid=' + ${pos.student.user.id}}"
+		       th:text="${pos.student.studentName}">StudentName</a>
+		    (<span th:text="${pos.student.am}">12345</span>)
+		  </span>
+		  <span th:if="${pos.student == null}">No student assigned</span>
+		</p>
+
+      <p><strong>End Date:</strong> <span th:text="${pos.toDate}">2025-12-31</span></p>
+
+      <!-- Evaluations Section -->
+      <div class="evaluations">
+        <h6>Evaluations:</h6>
+
+        <div th:if="${not #lists.isEmpty(pos.evaluations)}"
+             th:each="eval : ${pos.evaluations}">
+          <p>
+            <strong th:text="${eval.evaluationType}">TYPE</strong>
+            <br/>
+            Motivation: <span th:text="${eval.motivation}">0</span>,
+            Efficiency: <span th:text="${eval.efficiency}">0</span>,
+            Effectiveness: <span th:text="${eval.effectiveness}">0</span>
+          </p>
+        </div>
+        <div th:if="${#lists.isEmpty(pos.evaluations)}">
+          No evaluations found.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="btn btn-secondary" th:href="@{/professor/homepage}">Return Home</a>
+
+</div>
+
+<div class="footer">
+  <p>Support: trainup.support@yahoo.gr | Phone: +30 210 3366999</p>
+</div>
+
+</body>
+</html>

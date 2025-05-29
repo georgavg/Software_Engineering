@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Professor Details</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 20px;
+      position: relative;
+      text-align: center;
+    }
+    .header h2 {
+      margin: 0;
+    }
+    .profile-image-container {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .profile-image-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .default-avatar {
+      opacity: 0.8;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn-back {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Professor Details</h2>
+    <div class="profile-image-container">
+      <img th:if="${professor.profileImage != null}"
+           th:src="@{'/professor/profileImage/' + ${professor.user.id}}"
+           alt="Professor Image"/>
+      <img th:if="${professor.profileImage == null}"
+           src="/images/user.png"
+           alt="Default Professor Icon"
+           class="default-avatar"/>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card p-4">
+      <h4 class="mb-3" th:text="${professor.professorName}">Professor Name</h4>
+      <p>
+        <strong>Phone Number:</strong> 
+        <span th:text="${professor.professorNumber}">210 1234567</span>
+      </p>
+      <p>
+        <strong>Location:</strong>
+        <span th:text="${professor.professorLocation}">Office 12</span>
+      </p>
+      <p>
+        <strong>University:</strong>
+        <span th:text="${professor.professorUniversity}">Some University</span>
+      </p>
+      <p>
+        <strong>Biography:</strong>
+        <span th:text="${professor.professorBiography}">Lorem ipsum</span>
+      </p>
+      <p>
+        <strong>Website:</strong>
+        <a th:href="${professor.professorWebsite}"
+           th:text="${professor.professorWebsite}"
+           target="_blank">Website</a>
+      </p>
+      <p>
+        <strong>Interests:</strong>
+        <span th:text="${professor.getInterestsAsString()}">Data, AI, ML</span>
+      </p>
+      <button type="button" class="btn btn-secondary btn-back" onclick="history.back()">Back</button>
+    </div>
+  </div>
+</body>
+</html>

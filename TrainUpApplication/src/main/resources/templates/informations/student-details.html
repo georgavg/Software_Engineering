@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Student Details</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 20px;
+      position: relative;
+      text-align: center;
+    }
+    .header h2 {
+      margin: 0;
+    }
+    .profile-image-container {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .profile-image-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .default-avatar {
+      opacity: 0.8;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn-back {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Student Details</h2>
+    <div class="profile-image-container">
+      <img th:if="${student.profileImage != null}"
+           th:src="@{'/student/profileImage/' + ${student.user.id}}"
+           alt="Student Image"/>
+      <img th:if="${student.profileImage == null}"
+           src="/images/user.png"
+           alt="Default Student Icon"
+           class="default-avatar"/>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card p-4">
+      <h4 class="mb-3" th:text="${student.studentName}">Student Name</h4>
+      <p>
+        <strong>Email:</strong>
+        <span th:text="${student.user.email}">student@domain.com</span>
+      </p>
+      <p>
+        <strong>Phone Number:</strong>
+        <span th:text="${student.studentNumber}">210 1234567</span>
+      </p>
+      <p>
+        <strong>University:</strong>
+        <span th:text="${student.studentUniversity}">University X</span>
+      </p>
+      <p>
+        <strong>AM:</strong>
+        <span th:text="${student.am}">123456</span>
+      </p>
+      <p>
+        <strong>Average Grade:</strong>
+        <span th:text="${student.averageGrade}">8.5</span>
+      </p>
+      <p>
+        <strong>Biography:</strong>
+        <span th:text="${student.studentBiography}">Lorem ipsum...</span>
+      </p>
+      <p>
+        <strong>Skills:</strong>
+        <span th:text="${#strings.listJoin(student.skills, ', ')}">Java, Spring</span>
+      </p>
+      <p>
+        <strong>Interests:</strong>
+        <span th:text="${#strings.listJoin(student.interests, ', ')}">AI, ML</span>
+      </p>
+      <button type="button" class="btn btn-secondary btn-back" onclick="history.back()">Back</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Professor Profile</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    .form-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .profile-image-preview {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-top: 10px;
+    }
+    .required-field::after {
+      content: " *";
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h3>Edit Professor Profile</h3>
+      <form th:action="@{/professor/saveProfessor}" th:object="${professor}" method="post" enctype="multipart/form-data">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="professorName" class="required-field">Full Name</label>
+          <input type="text" id="professorName" name="professorName" class="form-control" 
+                 th:value="${professor.professorName}" required/>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group">
+          <label for="professorNumber">Phone Number</label>
+          <input type="text" id="professorNumber" name="professorNumber" class="form-control" 
+                 th:value="${professor.professorNumber}" required/>
+        </div>
+
+        <!-- Location (mandatory) -->
+        <div class="form-group">
+          <label for="professorLocation" class="required-field">Location</label>
+          <input type="text" id="professorLocation" name="professorLocation" class="form-control" 
+                 th:value="${professor.professorLocation}" required/>
+        </div>
+
+        <!-- University -->
+        <div class="form-group">
+          <label for="professorUniversity">University</label>
+          <input type="text" id="professorUniversity" name="professorUniversity" class="form-control" 
+                 th:value="${professor.professorUniversity}" required/>
+        </div>
+
+        <!-- Biography -->
+        <div class="form-group">
+          <label for="professorBiography">Biography</label>
+          <textarea id="professorBiography" name="professorBiography" class="form-control" rows="4" 
+                    required th:text="${professor.professorBiography}"></textarea>
+        </div>
+        
+        <!-- Interests -->
+        <div class="form-group">
+            <label for="interestsAsString" class="required-field">Interests (comma-separated):</label>
+            <textarea class="form-control" id="interestsAsString"
+                      th:field="*{interestsAsString}" required></textarea>
+        </div>
+
+        <!-- Website (optional) -->
+        <div class="form-group">
+          <label for="professorWebsite">Website</label>
+          <input type="url" id="professorWebsite" name="professorWebsite" class="form-control" 
+                 th:value="${professor.professorWebsite}" />
+        </div>
+
+        <!-- Profile Image -->
+        <div class="form-group">
+          <label for="file">Profile Image</label>
+          <input type="file" id="file" name="file" class="form-control-file"/>
+          <div>
+            <img th:if="${professor.profileImage != null}"
+                 th:src="@{'/professor/profileImage/' + ${professor.user.id}}"
+                 alt="Profile Image" class="profile-image-preview"/>
+            <img th:if="${professor.profileImage == null}"
+                 src="/images/user.png"
+                 alt="Default User Icon" class="profile-image-preview"/>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Profile</button>
+        <a th:href="@{/professor/homepage}" class="btn btn-secondary">Return</a>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="el" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Evaluation Form</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    .btn-custom {
+      background-color: #0c3759;
+      color: white;
+      border-radius: 20px;
+      padding: 10px 20px;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+      <div class="form-container">
+          <h3>Rating Entry</h3>
+          <form th:action="@{'/professor/saveEvaluation/' + ${position.id}}" method="post">
+              <input type="hidden" name="positionId" th:value="${position.id}" />
+              
+              <div class="form-group">
+                  <label>Motivation (1-5)</label>
+                  <input type="number" name="motivation" class="form-control" min="1" max="5"
+                         th:value="${evaluation != null ? evaluation.motivation : ''}" required/>
+              </div>
+              <div class="form-group">
+                  <label>Effectiveness (1-5)</label>
+                  <input type="number" name="effectiveness" class="form-control" min="1" max="5"
+                         th:value="${evaluation != null ? evaluation.effectiveness : ''}" required/>
+              </div>
+              <div class="form-group">
+                  <label>Efficiency (1-5)</label>
+                  <input type="number" name="efficiency" class="form-control" min="1" max="5"
+                         th:value="${evaluation != null ? evaluation.efficiency : ''}" required/>
+              </div>
+              <!-- Αφαιρέθηκαν τα πεδία για εταιρικές αξιολογήσεις, καθώς για καθηγητή δεν απαιτούνται -->
+              <button type="submit" class="btn btn-custom">Submit Evaluation</button>
+              <a class="btn btn-secondary" href="/professor/traineeships">Return</a>
+          </form>
+      </div>
+  </div>
+</body>
+</html>

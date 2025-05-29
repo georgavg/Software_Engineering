@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Traineeship Results</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .header h2 {
+      margin: 0;
+    }
+    .container {
+      margin-top: 30px;
+      max-width: 800px;
+    }
+    .card {
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-weight: bold;
+      color: #0c3759;
+    }
+    .label {
+      font-weight: bold;
+      color: #0c3759;
+    }
+    .badge-pass {
+      background-color: green;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin-left: 10px;
+    }
+    .badge-fail {
+      background-color: red;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin-left: 10px;
+    }
+    .footer {
+      background-color: #0c3759;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h2>Traineeship Results</h2>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-body">
+
+      <!-- Title -->
+      <h4 class="card-title" th:text="${position.title}">Position Title</h4>
+
+      <!-- Pass/fail -->
+      <div th:if="${student.traineeshipCompleted != null}">
+        <span th:if="${student.traineeshipCompleted.equals('Pass')}"
+              class="badge-pass">Pass</span>
+        <span th:if="${student.traineeshipCompleted.equals('Fail')}"
+              class="badge-fail">Fail</span>
+      </div>
+
+      <p><span class="label">Company:</span>
+         <span th:if="${position.company != null}">
+           <a th:href="@{'/informations/companyDetails?cid=' + ${position.company.user.id}}"
+              th:text="${position.company.companyName}">CompanyName</a>
+         </span>
+         <span th:if="${position.company == null}">No Company</span>
+      </p>
+
+      <p><span class="label">Supervisor:</span>
+         <span th:if="${position.supervisor != null}">
+           <a th:href="@{'/informations/professorDetails?pid=' + ${position.supervisor.user.id}}"
+              th:text="${position.supervisor.professorName}">Professor</a>
+         </span>
+         <span th:if="${position.supervisor == null}">No Supervisor</span>
+      </p>
+
+      <p>
+        <span class="label">Duration:</span>
+        From <span th:text="${position.fromDate}">2025-01-01</span> 
+        to <span th:text="${position.toDate}">2025-06-30</span>
+      </p>
+
+      <hr/>
+
+      <h5>Logbook:</h5>
+      <p th:text="${position.studentLogbook}">-- No logbook content --</p>
+
+      <hr/>
+
+      <h5>Evaluations:</h5>
+      <div th:if="${not #lists.isEmpty(position.evaluations)}"
+           th:each="eval : ${position.evaluations}">
+        <p>
+          <span th:text="'Type: ' + ${eval.evaluationType}">Type</span><br/>
+          Motivation: <span th:text="${eval.motivation}">0</span>,
+          Efficiency: <span th:text="${eval.efficiency}">0</span>,
+          Effectiveness: <span th:text="${eval.effectiveness}">0</span>
+        </p>
+      </div>
+      <p th:if="${#lists.isEmpty(position.evaluations)}">No evaluations found.</p>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <a th:href="@{/student/homepage}" class="btn btn-secondary">Back to Homepage</a>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Support: trainup.support@yahoo.gr | Phone: +30 210 3366999</p>
+</div>
+
+</body>
+</html>

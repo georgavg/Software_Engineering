@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Traineeship Logbook</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    /* HEADER */
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+    .portal-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #28a745;
+      text-transform: uppercase;
+      float: left;
+    }
+    .header-content {
+      text-align: center;
+      flex-grow: 1;
+    }
+    .header-content img {
+      height: 80px;
+      margin-bottom: 5px;
+    }
+    .header-content h2 {
+      font-size: 1.3em;
+      margin: 0;
+    }
+    .logout-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    /* Profile image container με absolute positioning κάτω από το logout */
+    .profile-image-container {
+      position: absolute;
+      right: 20px;
+      top: 70px;
+    }
+    .profile-image-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .default-avatar {
+      opacity: 0.8;
+    }
+
+    .container {
+      margin-top: 30px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border: none;
+    }
+    .card-title {
+      color: #0c3759;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    .btn-custom {
+      background-color: #0c3759;
+      color: white;
+      border-radius: 20px;
+      padding: 10px 20px;
+    }
+  </style>
+  <script>
+    function confirmLogout() {
+      return confirm("Are you sure you want to log out?");
+    }
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="portal-title">STUDENT PORTAL</div>
+    <div class="header-content">
+      <img src="/images/logo.png" alt="TRAINUP Logo">
+      <h2>TRAINUP - Bridging Students & Careers</h2>
+    </div>
+    <form action="/logout" method="post" onsubmit="return confirmLogout();" class="logout-btn">
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+    <!-- Εικόνα φοιτητή κάτω από το logout -->
+    <div class="profile-image-container">
+      <img th:if="${student.profileImage != null}"
+           th:src="@{'/student/profileImage/' + ${student.user.id}}"
+           alt="Profile Image" />
+      <img th:if="${student.profileImage == null}"
+           src="/images/user.png"
+           alt="Default User Icon"
+           class="default-avatar" />
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="mt-4 mb-4" style="color: #0c3759;">Manage My Traineeship Logbook</h2>
+    
+    <div class="row">
+      <!-- Στήλη 1: Πληροφορίες Θέσης -->
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title" th:text="${position.title}">Traineeship Title</h4>
+            <p>
+              <strong>Company:</strong>
+              <a th:href="@{/informations/companyDetails (cid=${position.company.user.id})}"
+                 th:text="${position.company.companyName}">Company Name</a>
+            </p>
+            <p>
+              <strong>Professor (Supervisor):</strong>
+              <a th:href="@{/informations/professorDetails (pid=${position.supervisor.user.id})}"
+                 th:text="${position.supervisor.professorName}">Professor Name</a>
+            </p>
+            <p>
+              <strong>Start Date:</strong> 
+              <span th:text="${position.fromDate}">2025-01-01</span>
+            </p>
+            <p>
+              <strong>End Date:</strong> 
+              <span th:text="${position.toDate}">2025-05-31</span>
+            </p>
+            <p>
+              <strong>Required 	Skills:</strong>
+              <span th:text="${#strings.listJoin(position.skills, ', ')}">Skill1, Skill2</span>
+            </p>
+            <p>
+              <strong>Traineeship Topics:</strong>
+              <span th:text="${#strings.listJoin(position.topics, ', ')}">Topic1, Topic2</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Στήλη 2: Logbook Form -->
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Logbook Entry</h4>
+            <form th:action="@{/student/saveLogbook}" method="post">
+              <input type="hidden" name="positionId" th:value="${position.id}" />
+              <div class="form-group">
+                <label for="logbookContent">Logbook Content:</label>
+                <textarea class="form-control" id="logbookContent" name="logbookContent"
+                          rows="8"
+                          th:text="${position.studentLogbook}"></textarea>
+              </div>
+              <button type="submit" class="btn btn-custom">Update logbook</button>
+              <a th:href="@{/student/homepage}" class="btn btn-secondary">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

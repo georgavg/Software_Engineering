@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Student Profile</title>
+    <link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <style>
+    .form-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .profile-image-preview {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-top: 10px;
+    }
+    .required-field::after {
+      content: " *";
+      color: red;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="my-4">Edit Student Profile</h1>
+
+    <form th:action="@{/student/saveStudent}"
+	      th:object="${student}"
+	      method="post"
+	      enctype="multipart/form-data"
+	      id="studentForm">
+
+        <!-- Full Name -->
+        <div class="form-group">
+            <label for="studentName" class="required-field">Student Name:</label>
+            <input type="text" class="form-control" id="studentName"
+                   th:field="*{studentName}" required/>
+        </div>
+        
+		<!-- University -->
+        <div class="form-group">
+            <label for="studentUniversity" class="required-field">University:</label>
+            <input type="text" class="form-control" id="studentUniversity"
+                   th:field="*{studentUniversity}" required/>
+        </div>
+        
+        <!-- AM (University ID) -->
+        <div class="form-group">
+            <label for="am" class="required-field">AM (University ID):</label>
+            <input type="text" class="form-control" id="am"
+                   th:field="*{am}" required/>
+        </div>
+		
+		<!-- Average Grade -->
+        <div class="form-group">
+            <label for="averageGrade" class="required-field">Average Grade:</label>
+            <input type="number" step="0.1" min="5" max="10" class="form-control" 
+                   id="averageGrade" th:field="*{averageGrade}" required/>
+        </div>
+        
+        <!-- Phone Number -->
+        <div class="form-group">
+            <label for="studentNumber">Phone Number:</label>
+            <input type="text" class="form-control" id="studentNumber"
+                   th:field="*{studentNumber}"/>
+        </div>
+
+        <!-- Preferred Location -->
+        <div class="form-group">
+            <label for="preferredLocation" class="required-field">Preferred Location:</label>
+            <input type="text" class="form-control" id="preferredLocation"
+                   th:field="*{preferredLocation}" required/>
+        </div>
+
+        <!-- Biography -->
+        <div class="form-group">
+            <label for="studentBiography">Biography:</label>
+            <textarea class="form-control" id="studentBiography"
+                      th:field="*{studentBiography}"></textarea>
+        </div>
+
+        <!-- Skills -->
+        <div class="form-group">
+            <label for="skillsAsString" class="required-field">Skills (comma-separated):</label>
+            <textarea class="form-control" id="skillsAsString"
+                      th:field="*{skillsAsString}" required></textarea>
+        </div>
+
+        <!-- Interests -->
+        <div class="form-group">
+            <label for="interestsAsString" class="required-field">Interests (comma-separated):</label>
+            <textarea class="form-control" id="interestsAsString"
+                      th:field="*{interestsAsString}" required></textarea>
+        </div>
+
+        <!-- Looking for Traineeship? -->
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input"
+                   id="lookingForTraineeship"
+                   th:field="*{lookingForTraineeship}"/>
+            <label for="lookingForTraineeship" class="form-check-label">
+                Looking for a traineeship
+            </label>
+        </div>
+        
+        <div class="form-group">
+          <label for="file">Εικόνα Προφίλ</label>
+          <input type="file" id="file" name="file" class="form-control-file"/>
+          <div>
+            <img th:if="${student.profileImage != null}"
+                 th:src="@{'/student/profileImage/' + ${student.user.id}}"
+                 alt="Profile Image" class="profile-image-preview"/>
+            <img th:if="${student.profileImage == null}"
+                 src="/images/user.png"
+                 alt="Default User Icon" class="profile-image-preview"/>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a th:href="@{/student/homepage}" class="btn btn-secondary">Return</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Search Positions for Student</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+  <h3>Search Positions for: <span th:text="${student.studentName}">Student Name</span></h3>
+
+  <form th:action="@{/committee/doSearchPositions}" method="post">
+	  <input type="hidden" name="studentId" th:value="${student.user.id}" />
+	  <select name="strategy" class="form-control">
+	    <option value="INTERESTS">Match by Interests</option>
+	    <option value="LOCATION">Match by Location</option>
+	    <option value="BOTH">Match by Both</option>
+	  </select>
+	  <button type="submit" class="btn btn-primary">Search</button>
+	</form>
+
+</div>
+</body>
+</html>

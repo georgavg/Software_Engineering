@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Progress</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <h3>Progress for: <span th:text="${position.title}">Position Title</span></h3>
+    
+	<div th:if="${error}">
+	  <div class="alert alert-danger">
+	    <span th:text="${error}">Error message</span>
+	  </div>
+	</div>
+	
+    <!-- Student Info -->
+    <div th:if="${assignedStudent != null}" class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Assigned Student</h5>
+            <p><strong>Name:</strong> <span th:text="${assignedStudent.studentName}"></span></p>
+            <p><strong>AM:</strong> <span th:text="${assignedStudent.am}"></span></p>
+            <p><strong>Phone:</strong> <span th:text="${assignedStudent.studentNumber}"></span></p>
+            <p><strong>Logbook:</strong> <span th:text="${position.studentLogbook}">--</span></p>
+        </div>
+    </div>
+	
+    <!-- Supervisor Info / Assign Supervisor -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Supervisor</h5>
+            <div th:if="${position.supervisor != null}">
+                <p><strong>Professor:</strong> <span th:text="${position.supervisor.professorName}"></span></p>
+            </div>
+            <div th:if="${position.supervisor == null}">
+                <p>No supervisor assigned yet.</p>
+                <form th:action="@{/committee/assignSupervisor}" method="post">
+                    <input type="hidden" name="positionId" th:value="${position.id}"/>
+                    <label for="supervisorStrategy">Choose a strategy:</label>
+                    <select id="supervisorStrategy" name="strategy" class="form-control mb-2">
+                        <option value="INTERESTS">By Interests</option>
+                        <option value="MIN_LOAD">Min Load</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Assign Supervisor</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+
+           <!-- Evaluations Section: read-only -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Evaluations</h5>
+            <div th:if="${#lists.isEmpty(evaluations)}">
+                <p>No evaluations yet.</p>
+            </div>
+            <table class="table read-only-eval" th:if="${not #lists.isEmpty(evaluations)}">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Motivation</th>
+                        <th>Efficiency</th>
+                        <th>Effectiveness</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="eval : ${evaluations}">
+                        <td th:text="${eval.evaluationType}">TYPE</td>
+                        <td th:text="${eval.motivation}">0</td>
+                        <td th:text="${eval.efficiency}">0</td>
+                        <td th:text="${eval.effectiveness}">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+	
+    <!-- Complete the traineeship (pass/fail) -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Finalize Traineeship</h5>
+            <p>Mark the traineeship as pass or fail.</p>
+            <form th:action="@{/committee/completeTraineeship}" method="post">
+			    <input type="hidden" name="positionId" th:value="${position.id}"/>
+			    <div class="form-group">
+			        <label>Result:</label><br/>
+			        <label>
+			            <input type="radio" name="passFail" value="true"/> Pass
+			        </label>
+			        <label>
+			            <input type="radio" name="passFail" value="false"/> Fail
+			        </label>
+			    </div>
+			    <button type="submit" class="btn btn-danger">Complete</button>
+			</form>
+        </div>
+    </div>
+
+    <a th:href="@{/committee/homepage}" class="btn btn-secondary">Return</a>
+</div>
+</body>
+</html>

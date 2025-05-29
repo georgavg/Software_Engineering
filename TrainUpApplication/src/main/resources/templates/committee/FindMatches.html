@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Matching Positions</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+  <h3>Matching Positions for: <span th:text="${student.studentName}">Name</span></h3>
+
+  <div th:if="${#lists.isEmpty(matchingPositions)}">
+    <p>No matching positions found.</p>
+  </div>
+  <div th:if="${not #lists.isEmpty(matchingPositions)}"
+       th:each="pos : ${matchingPositions}" class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title" th:text="${pos.title}">Position Title</h5>
+      <p><strong>Company:</strong>
+         <span th:text="${pos.company.companyName}">Company Name</span></p>
+      <p><strong>Description:</strong> <span th:text="${pos.description}"></span></p>
+      <p><strong>From:</strong> <span th:text="${pos.fromDate}"></span>
+         &nbsp;&nbsp; <strong>To:</strong> <span th:text="${pos.toDate}"></span></p>
+
+      <!-- Assign button -->
+      <form th:action="@{/committee/assignPosition}" method="post" class="mt-2">
+        <input type="hidden" name="studentId" th:value="${student.id}" />
+        <input type="hidden" name="positionId" th:value="${pos.id}" />
+        <button type="submit" class="btn btn-success btn-sm">Assign This Position</button>
+      </form>
+    </div>
+  </div>
+
+  <a th:href="@{/committee/homepage}" class="btn btn-secondary">Return</a>
+</div>
+</body>
+</html>

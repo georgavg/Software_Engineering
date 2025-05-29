@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Position Details</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 20px;
+      position: relative;
+      text-align: center;
+    }
+    .header h2 {
+      margin: 0;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn-back {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Position Details</h2>
+  </div>
+
+  <div class="container">
+    <div class="card p-4">
+      <h4 class="mb-3" th:text="${position.title}">Position Title</h4>
+      <p>
+        <strong>Description:</strong>
+        <span th:text="${position.description}">Description</span>
+      </p>
+      <p>
+        <strong>From Date:</strong>
+        <span th:text="${position.fromDate}">2025-01-01</span>
+      </p>
+      <p>
+        <strong>To Date:</strong>
+        <span th:text="${position.toDate}">2025-06-30</span>
+      </p>
+      <p>
+        <strong>Skills:</strong>
+        <span th:text="${#strings.listJoin(position.skills, ', ')}">Java, Spring</span>
+      </p>
+      <p>
+        <strong>Topics:</strong>
+        <span th:text="${#strings.listJoin(position.topics, ', ')}">AI, ML</span>
+      </p>
+      <button type="button" class="btn btn-secondary btn-back" onclick="history.back()">Back</button>
+    </div>
+  </div>
+</body>
+</html>

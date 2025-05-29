@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Company Details</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Arial', sans-serif;
+    }
+    .header {
+      background-color: #0c3759;
+      color: white;
+      padding: 40px;
+      position: relative;
+      text-align: center;
+    }
+    .header h2 {
+      margin: 0;
+    }
+    .profile-image-container {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .profile-image-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .default-avatar {
+      opacity: 0.8;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn-back {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Company Details</h2>
+    <div class="profile-image-container">
+      <!-- Εμφάνιση εικόνας εταιρείας -->
+      <img th:if="${company.profileImage != null}"
+		     th:src="@{'/company/profileImage/' + ${company.user.id}}"
+		     alt="Company Image"/>
+      <img th:if="${company.profileImage == null}"
+           src="/images/user.png"
+           alt="Default Company Icon"
+           class="default-avatar"/>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card p-4">
+      <h4 class="mb-3" th:text="${company.companyName}">Company Name</h4>
+      <p><strong>Location:</strong> <span th:text="${company.companyLocation}">Location</span></p>
+      <p><strong>Description:</strong> <span th:text="${company.companyDescription}">Description</span></p>
+      <p><strong>Phone Number:</strong> <span th:text="${company.companyNumber}">Phone</span></p>
+      <p>
+        <strong>Website:</strong> 
+        <a th:href="${company.companyWebsite}" 
+           th:text="${company.companyWebsite}" 
+           target="_blank">Website</a>
+      </p>
+      <button type="button" class="btn btn-secondary btn-back" onclick="history.back()">Back</button>
+    </div>
+  </div>
+</body>
+</html>
